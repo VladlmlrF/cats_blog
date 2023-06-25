@@ -11,7 +11,7 @@
 {% block content %}
     {% for post in posts%}
         <p>
-            <a href="#">
+            <a href="{{ url_for('posts.post_detail_page', name=post.name) }}">
                 {{ post.title }}
             </a>
         </p>
