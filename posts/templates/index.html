@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home page
+{% endblock %}
+
+{% block content_title %}
+    Блог о кошках, больших и не очень))
+{% endblock %}
+
+{% block content %}
+    {% for post in posts%}
+        <p>
+            <a href="#">
+                {{ post.title }}
+            </a>
+        </p>
+    {% endfor %}
+{% endblock %}
