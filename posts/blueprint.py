@@ -13,4 +13,9 @@ def index_page():
 @posts.route('/<name>')
 def post_detail_page(name):
     post = Post.query.filter(Post.name == name).first()
-    return render_template('post_detail.html', post=post)
+    # return render_template('post_detail.html', post=post)
+    if post:
+        return render_template('post_detail.html', post=post)
+    else:
+        return render_template('page404.html'), 404
+

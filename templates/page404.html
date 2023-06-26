@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Page not found
+{% endblock %}
+
+{% block content_title %}
+    <p>Страница не найдена</p>
+{% endblock %}
+
+{% block content %}
+    <p>
+        Вернуться на <a href="{{ url_for('posts.index_page') }}">главную страницу</a>
+    </p>
+{% endblock %}
