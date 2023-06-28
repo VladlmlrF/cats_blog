@@ -10,9 +10,9 @@ def index_page():
     return render_template('index.html', posts=psts)
 
 
-@posts.route('/<name>')
-def post_detail_page(name):
-    post = Post.query.filter(Post.name == name).first()
+@posts.route('/<url>')
+def post_detail_page(url):
+    post = Post.query.filter(Post.url == url).first()
     # return render_template('post_detail.html', post=post)
     if post:
         return render_template('post_detail.html', post=post)

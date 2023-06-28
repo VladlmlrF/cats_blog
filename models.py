@@ -8,7 +8,7 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    name = db.Column(db.String(100), unique=True)
+    url = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.now)
 
@@ -22,5 +22,5 @@ class Post(db.Model):
     def generate_name(self):
         if self.title:
             pattern = r'[^\w+]'
-            self.name = re.sub(pattern, '-', self.title)
-            return self.name
+            self.url = re.sub(pattern, '-', self.title)
+            return self.url
