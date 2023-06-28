@@ -3,6 +3,18 @@ from datetime import datetime
 import re
 
 
+def generate_url(s):
+    pattern = r'[^\w+]'
+    return re.sub(pattern, '-', s)
+
+
+post_tags = db.Table(
+    'post_tags',
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+)
+
+
 class Post(db.Model):
     __tablename__ = 'post'
 
@@ -12,15 +24,26 @@ class Post(db.Model):
     body = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.now)
 
+    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
+
     def __init__(self, *args, **kwargs):
         super(Post, self).__init__(*args, **kwargs)
-        self.generate_name()
+        self.url = generate_url(self.title)
 
     def __repr__(self):
         return f'Post id: {self.id}, title: {self.title}'
 
-    def generate_name(self):
-        if self.title:
-            pattern = r'[^\w+]'
-            self.url = re.sub(pattern, '-', self.title)
-            return self.url
+
+class Tag(db.Model):
+    __tablename__ = 'tag'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    url = db.Column(db.String, unique=True)
+
+    def __init__(self, *args, **kwargs):
+        super(Tag, self).__init__(*args, **kwargs)
+        self.url = generate_url(self.title)
+
+    def __repr__(self):
+        return f'Tag id: {self.id}, title: {self.title}'

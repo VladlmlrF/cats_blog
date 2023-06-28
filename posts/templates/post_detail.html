@@ -9,5 +9,13 @@
 {% endblock %}
 
 {% block content %}
+    <div class="tags">
+        {% for tag in tags %}
+        <a href="#">
+            <span class="badge text-bg-primary">{{ tag.title }}</span>
+        </a>
+        {% endfor %}
+    </div>
+
     <p>{{ post.body }}</p>
 {% endblock %}
