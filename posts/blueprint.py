@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from models import Post
+from models import Post, Tag
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -20,7 +20,10 @@ def post_detail_page(url):
         return render_template('page404.html'), 404
 
 
-# @posts.route('/tag/<url>')
-# def tag_detail_page(url):
-#     tag =
+@posts.route('/tag/<url>')
+def tag_detail_page(url):
+    tag = Tag.query.filter(Tag.url == url).first()
+    psts = tag.posts.all()
+    return render_template('tag_detail.html', tag=tag, psts=psts)
+
 

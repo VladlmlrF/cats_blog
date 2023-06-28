@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ tag.title }}
+{% endblock %}
+
+{% block content_title %}
+  {{ tag.title }}
+{% endblock %}
+
+{% block content %}
+  {% for post in psts %}
+    <p>
+      <a href="{{ url_for('posts.post_detail_page', url=post.url) }}">
+        {{ post.title }}
+      </a>
+    </p>
+  {% endfor %}
+{% endblock %}
