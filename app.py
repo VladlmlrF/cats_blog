@@ -18,7 +18,8 @@ def page_not_found(error):
     return render_template('page404.html'), 404
 
 
-from models import Post, Tag, post_tags
+from models import Post, Tag, post_tags, User
 admin = Admin(app)
 admin.add_view(ModelView(Post, db.session))
 admin.add_view(ModelView(Tag, db.session))
+admin.add_view(ModelView(User, db.session))

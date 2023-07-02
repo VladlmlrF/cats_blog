@@ -15,5 +15,8 @@
                 {{ post.title }}
             </a>
         </p>
+        <p>
+            {{ post.body[:50] }}...
+        </p>
     {% endfor %}
 {% endblock %}

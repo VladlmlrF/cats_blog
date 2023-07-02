@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from models import Post, Tag, post_tags
+from models import Post, Tag, post_tags, User
 from app import db
 from .forms import PostForm
-
+from werkzeug.security import check_password_hash, generate_password_hash
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -13,7 +13,6 @@ def create_post_page():
         title = request.form.get('title')
         body = request.form.get('body')
         tags = request.form.get('tags').split(' ')
-        print(tags)
 
         if title:
             try:
@@ -72,3 +71,27 @@ def tag_detail_page(url):
     return render_template('tag_detail.html', tag=tag, psts=psts)
 
 
+@posts.route('/login')
+def login_page():
+    return render_template('login.html')
+
+
+@posts.route('/register', methods=['GET', 'POST'])
+def register_page():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        password2 = request.form.get('password2')
+        if len(name) > 4 and len(email) > 4 and len(password) > 4 and password2 == password:
+            p_hash = generate_password_hash(request.form.get('password'))
+            try:
+                user = User(name=name, email=email, password=p_hash)
+                db.session.add(user)
+                db.session.commit()
+                return redirect(url_for('posts.login_page'))
+            except:
+                print('User with the same name already exists')
+        else:
+            print('Неверно заполнены поля')
+    return render_template('register.html')
