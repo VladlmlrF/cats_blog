@@ -1,7 +1,8 @@
 from models import get_user
+from flask_login import UserMixin
 
 
-class UserLogin:
+class UserLogin(UserMixin):
     def from_db(self, user_id):
         self.us = get_user(user_id)
         return self
@@ -10,14 +11,8 @@ class UserLogin:
         self.us = user
         return self
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
     def get_id(self):
         return str(self.us.id)
+
+    def get_username(self):
+        return self.us.name

@@ -6,7 +6,7 @@ from app import db, login_manager
 from .forms import PostForm
 from werkzeug.security import check_password_hash, generate_password_hash
 from user_login import UserLogin
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, current_user
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -79,12 +79,14 @@ def tag_detail_page(url):
 
 @login_manager.user_loader
 def load_user(user_id):
-    print('load user')
     return UserLogin().from_db(user_id)
 
 
 @posts.route('/login', methods=['GET', 'POST'])
 def login_page():
+    if current_user.is_authenticated:
+        return redirect(url_for('profile.profile_page'))
+
     if request.method == 'POST':
         email = request.form.get('email')
         try:
@@ -93,8 +95,9 @@ def login_page():
             print('Пользователь не найден', e)
         if user and check_password_hash(user.password, request.form.get('password')):
             user_log = UserLogin().create(user)
-            login_user(user_log)
-            return redirect(url_for('posts.index_page'))
+            in_memory = True if request.form.get('remember') else False
+            login_user(user_log, remember=in_memory)
+            return redirect(request.args.get('next') or url_for('profile.profile_page'))
         else:
             print('Неверный логин или пароль')
 
@@ -114,9 +117,9 @@ def register_page():
                 user = User(name=name, email=email, password=p_hash)
                 db.session.add(user)
                 db.session.commit()
-                return redirect(url_for('posts.login_page'))
             except:
                 print('User with the same name or email already exists')
+            return redirect(url_for('profile.profile_page'))
         else:
             print('Неверно заполнены поля')
     return render_template('register.html')
