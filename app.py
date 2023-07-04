@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object(Configuration)
@@ -11,6 +12,8 @@ app.config.from_object(Configuration)
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
+
+login_manager = LoginManager(app)
 
 
 @app.errorhandler(404)

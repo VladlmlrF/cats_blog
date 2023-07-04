@@ -1,13 +1,18 @@
+import sqlite3
+
 from flask import Blueprint, render_template, request, redirect, url_for
 from models import Post, Tag, post_tags, User
-from app import db
+from app import db, login_manager
 from .forms import PostForm
 from werkzeug.security import check_password_hash, generate_password_hash
+from user_login import UserLogin
+from flask_login import login_user, login_required
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
 
 @posts.route('/create', methods=['GET', 'POST'])
+@login_required
 def create_post_page():
     if request.method == 'POST':
         title = request.form.get('title')
@@ -55,6 +60,7 @@ def index_page():
 
 
 @posts.route('/<url>')
+@login_required
 def post_detail_page(url):
     post = Post.query.filter(Post.url == url).first()
     tags = post.tags
@@ -71,8 +77,27 @@ def tag_detail_page(url):
     return render_template('tag_detail.html', tag=tag, psts=psts)
 
 
-@posts.route('/login')
+@login_manager.user_loader
+def load_user(user_id):
+    print('load user')
+    return UserLogin().from_db(user_id)
+
+
+@posts.route('/login', methods=['GET', 'POST'])
 def login_page():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        try:
+            user = User.query.filter(User.email == email).first()
+        except sqlite3.Error as e:
+            print('Пользователь не найден', e)
+        if user and check_password_hash(user.password, request.form.get('password')):
+            user_log = UserLogin().create(user)
+            login_user(user_log)
+            return redirect(url_for('posts.index_page'))
+        else:
+            print('Неверный логин или пароль')
+
     return render_template('login.html')
 
 
@@ -91,7 +116,7 @@ def register_page():
                 db.session.commit()
                 return redirect(url_for('posts.login_page'))
             except:
-                print('User with the same name already exists')
+                print('User with the same name or email already exists')
         else:
             print('Неверно заполнены поля')
     return render_template('register.html')

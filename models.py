@@ -1,3 +1,5 @@
+import sqlite3
+
 from app import db
 from datetime import datetime
 import re
@@ -6,6 +8,16 @@ import re
 def generate_url(s):
     pattern = r'[^\w+]'
     return re.sub(pattern, '-', s)
+
+
+def get_user(user_id):
+    try:
+        user = User.query.filter(User.id == user_id).first()
+        return user
+    except sqlite3.Error as e:
+        print('Ошибка получения данных из БД', e)
+    print('Пользователь не найден')
+    return False
 
 
 post_tags = db.Table(
