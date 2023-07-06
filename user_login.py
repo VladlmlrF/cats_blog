@@ -16,3 +16,6 @@ class UserLogin(UserMixin):
 
     def get_username(self):
         return self.us.name
+
+    def get_user_email(self):
+        return self.us.email

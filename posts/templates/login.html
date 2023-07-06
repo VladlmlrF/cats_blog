@@ -9,26 +9,56 @@
 {% endblock %}
 
 {% block content %}
-  <div class="col-md-6">
+<p class="col-md-6" xmlns="http://www.w3.org/1999/html">
     <form action="" method="post">
-      <div class="form-floating mb-3">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" value="" required>
-        <label for="floatingInput">Email address</label>
-      </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" value="" required>
-        <label for="floatingPassword">Password</label>
-      </div>
-      <br>
-      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" name="remember">
-        <label class="btn btn-outline-primary" for="btncheck1">Remember me</label>
-      </div>
-      <button type="submit" class="btn btn-success">Log in</button>
+      {{ form.hidden_tag() }}
+      {% for field in form %}
+        {% if field.type == 'StringField' or field.type == 'PasswordField' %}
+            <p class="col-md-6">
+                {{ field.label(class='control-label') }}
+                    {% if field.errors %}
+                        {{ field(class='form-control') }}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        {{ field(class='form-control') }}
+                    {% endif %}
+            </p>
+        {% elif field.type == 'BooleanField' %}
+            <p>
+                {{ field.label(class='btn btn-outline-primary') }}
+                {{ field(class='btn-check', autocomplete="off") }}
+            </p>
+        {% endif %}
+      {% endfor %}
+        <p>
+            {{ form.login(class='btn btn-success') }}
+        </p>
+
+<!--      <div class="form-floating mb-3">-->
+<!--        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" value="" required>-->
+<!--        <label for="floatingInput">Email address</label>-->
+<!--      </div>-->
+<!--      <div class="form-floating">-->
+<!--        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" value="" required>-->
+<!--        <label for="floatingPassword">Password</label>-->
+<!--      </div>-->
+<!--      <br>-->
+<!--      <div class="btn-group" role="group">-->
+<!--        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" name="remember">-->
+<!--        <label class="btn btn-outline-primary" for="btncheck1">Remember me</label>-->
+<!--      </div>-->
+<!--      <button type="submit" class="btn btn-success">Log in</button>-->
     </form>
     <br>
     <form action="{{ url_for('posts.register_page') }}">
-        <button type="submit" class="btn btn-success" value="">Register</button>
+        <p>
+            {{ form.register(class='btn btn-success') }}
+        </p>
+<!--        <button type="submit" class="btn btn-success" value="">Register</button>-->
     </form>
   </div>
 {% endblock %}

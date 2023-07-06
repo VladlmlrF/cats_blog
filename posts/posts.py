@@ -3,7 +3,7 @@ import sqlite3
 from flask import Blueprint, render_template, request, redirect, url_for
 from models import Post, Tag, post_tags, User
 from app import db, login_manager
-from .forms import PostForm
+from .forms import PostForm, LoginForm, RegisterForm
 from werkzeug.security import check_password_hash, generate_password_hash
 from user_login import UserLogin
 from flask_login import login_user, login_required, current_user
@@ -17,11 +17,12 @@ def create_post_page():
     if request.method == 'POST':
         title = request.form.get('title')
         body = request.form.get('body')
+        avatar = request.form.get('avatar')
         tags = request.form.get('tags').split(' ')
 
         if title:
             try:
-                post = Post(title=title, body=body)
+                post = Post(title=title, body=body, avatar=avatar)
                 db.session.add(post)
                 all_tags = []
 
@@ -87,39 +88,68 @@ def login_page():
     if current_user.is_authenticated:
         return redirect(url_for('profile.profile_page'))
 
-    if request.method == 'POST':
-        email = request.form.get('email')
+    form = LoginForm()
+    if form.validate_on_submit():
         try:
-            user = User.query.filter(User.email == email).first()
+            user = User.query.filter(User.email == form.email.data).first()
         except sqlite3.Error as e:
             print('Пользователь не найден', e)
-        if user and check_password_hash(user.password, request.form.get('password')):
+
+        if user and check_password_hash(user.password, form.password.data):
             user_log = UserLogin().create(user)
-            in_memory = True if request.form.get('remember') else False
+            in_memory = form.remember.data
             login_user(user_log, remember=in_memory)
             return redirect(request.args.get('next') or url_for('profile.profile_page'))
         else:
             print('Неверный логин или пароль')
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)
+
+
+    # if request.method == 'POST':
+    #     email = request.form.get('email')
+    #     try:
+    #         user = User.query.filter(User.email == email).first()
+    #     except sqlite3.Error as e:
+    #         print('Пользователь не найден', e)
+    #     if user and check_password_hash(user.password, request.form.get('password')):
+    #         user_log = UserLogin().create(user)
+    #         in_memory = True if request.form.get('remember') else False
+    #         login_user(user_log, remember=in_memory)
+    #         return redirect(request.args.get('next') or url_for('profile.profile_page'))
+    #     else:
+    #         print('Неверный логин или пароль')
+    #
+    # return render_template('login.html')
 
 
 @posts.route('/register', methods=['GET', 'POST'])
 def register_page():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        password2 = request.form.get('password2')
-        if len(name) > 4 and len(email) > 4 and len(password) > 4 and password2 == password:
-            p_hash = generate_password_hash(request.form.get('password'))
-            try:
-                user = User(name=name, email=email, password=p_hash)
-                db.session.add(user)
-                db.session.commit()
-            except:
-                print('User with the same name or email already exists')
-            return redirect(url_for('profile.profile_page'))
-        else:
-            print('Неверно заполнены поля')
-    return render_template('register.html')
+    form = RegisterForm()
+    if form.validate_on_submit():
+        p_hash = generate_password_hash(form.password.data)
+        try:
+            user = User(name=form.name.data, email=form.email.data, password=p_hash)
+            db.session.add(user)
+            db.session.commit()
+        except:
+            print('User with the same name or email already exists')
+        return redirect(url_for('profile.profile_page'))
+
+    # if request.method == 'POST':
+    #     name = request.form.get('name')
+    #     email = request.form.get('email')
+    #     password = request.form.get('password')
+    #     password2 = request.form.get('password2')
+    #     if len(name) > 4 and len(email) > 4 and len(password) > 4 and password2 == password:
+    #         p_hash = generate_password_hash(request.form.get('password'))
+    #         try:
+    #             user = User(name=name, email=email, password=p_hash)
+    #             db.session.add(user)
+    #             db.session.commit()
+    #         except:
+    #             print('User with the same name or email already exists')
+    #         return redirect(url_for('profile.profile_page'))
+    #     else:
+    #         print('Неверно заполнены поля')
+    return render_template('register.html', form=form)
