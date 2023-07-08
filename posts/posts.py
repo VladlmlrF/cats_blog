@@ -60,8 +60,7 @@ def index_page():
 def post_detail_page(url):
         post = Post.query.filter(Post.url == url).first()
         tags = post.tags
-        return render_template('post_detail.html', post=post)
-
+        return render_template('post_detail.html', post=post, tags=tags)
 
 @posts.route('/post_avatar/<url>')
 def get_post_avatar(url):

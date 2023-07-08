@@ -10,13 +10,15 @@
 
 {% block content %}
     {% for post in posts%}
-        <p>
+        <div class="container">
+            <img src="/post_avatar/{{ post.url }}" class="rounded mx-auto d-block" width="100" style="float:left">
             <a href="{{ url_for('posts.post_detail_page', url=post.url) }}">
-                {{ post.title }}
+                <h5>{{ post.title }}</h5>
             </a>
-        </p>
+        </div>
         <p>
-            {{ post.body[:50] }}...
+            {{ post.body[:100] }}...
         </p>
+        <br>
     {% endfor %}
 {% endblock %}
