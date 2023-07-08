@@ -1,14 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, FileField, PasswordField, BooleanField, SubmitField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import StringField, TextAreaField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
-# import email_validator
 
 
 class PostForm(FlaskForm):
-    title = StringField('title')
-    body = TextAreaField('body')
-    avatar = FileField('avatar')
-    tags = StringField('tags')
+    title = StringField('Title', validators=[DataRequired()])
+    body = TextAreaField('Body', validators=[DataRequired()])
+    avatar = FileField('Avatar', validators=[FileRequired()])
+    tags = StringField('Tags', validators=[DataRequired()])
+    create = SubmitField('Create')
 
 
 class LoginForm(FlaskForm):

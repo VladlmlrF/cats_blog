@@ -16,8 +16,6 @@
         </a>
         {% endfor %}
     </div>
-
-    <img src="{{ post.avatar }}" alt="Картинка">
-
+    <img src="/post_avatar/{{ post.url }}" class="rounded mx-auto d-block" width="500">
     <p>{{ post.body }}</p>
 {% endblock %}

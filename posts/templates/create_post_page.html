@@ -11,14 +11,18 @@
 {% block content %}
   <div class="col-md-6">
     <form action="{{ url_for('posts.create_post_page') }}" method="post" enctype="multipart/form-data">
-      {% for field in form %}
+      {{ form.hidden_tag() }}
+      {% for field in form if field.name not in ['avatar', 'create', 'csrf_token'] %}
         <div class="form-group">
           {{ field.label(class='control-label') }}
           {{ field(class='form-control') }}
         </div>
       {% endfor %}
-      <br>
-      <button type="submit" class="btn btn-success">Create</button>
+      <div class="mb-3">
+        {{ form.avatar.label(class='form-label') }}
+        {{ form.avatar(class='form-control') }}
+      </div>
+      {{ form.create(class='btn btn-success') }}
     </form>
   </div>
 {% endblock %}

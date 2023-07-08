@@ -3,6 +3,7 @@ import sqlite3
 from app import db
 from datetime import datetime
 import re
+from flask import url_for
 
 
 def generate_url(s):
@@ -32,7 +33,7 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    avatar = db.Column(db.BLOB, default=None)
+    avatar = db.Column(db.LargeBinary, default=None)
     url = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.now)
@@ -45,6 +46,17 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'Post id: {self.id}, title: {self.title}'
+
+    def get_avatar(self, app):
+        if not self.avatar:
+            try:
+                with app.open_resource(app.root_path + url_for('static', filename='img/default.jpg'), 'rb') as file:
+                    img = file.read()
+            except FileNotFoundError as e:
+                print('Не найден аватар', e)
+        else:
+            img = self.avatar
+        return img
 
 
 class Tag(db.Model):
@@ -68,7 +80,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
+    password = db.Column(db.String(500))
 
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(*args, **kwargs)
