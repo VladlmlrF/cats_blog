@@ -14,7 +14,12 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'posts.login_page'
+login_manager.login_view = 'profile.login_page'
+
+
+@app.route('/')
+def index_page():
+    return render_template('index.html')
 
 
 @app.errorhandler(404)

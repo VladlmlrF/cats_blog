@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Register
+{% endblock %}
+
+{% block content_title %}
+  Регистрация
+{% endblock %}
+
+{% block content %}
+  <div class="col-md-6">
+    <form action="{{ url_for('profile.register_page') }}" method="post">
+      {{ form.hidden_tag() }}
+      {% for field in form if field.name not in ['register', 'csrf_token'] %}
+        <p class="col-md-6">
+          {{ field.label(class='control-label') }}
+          {% if field.errors %}
+            {{ field(class='form-control') }}
+            {% for error in field.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% else %}
+            {{ field(class='form-control') }}
+          {% endif %}
+        </p>
+      {% endfor %}
+      {{ form.register(class='btn btn-success') }}
+    </form>
+  </div>
+{% endblock %}

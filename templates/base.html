@@ -12,22 +12,22 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Cats blog</a>
+            <a class="navbar-brand" href="{{ url_for('index_page') }}">Cats blog</a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('posts.index_page') }}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('posts.index_page') }}">Все посты</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('posts.create_post_page') }}">Create</a>
+                        <a class="nav-link active" href="{{ url_for('posts.create_post_page') }}">Создать пост</a>
                     </li>
                 </ul>
                 <form class="d-flex" role="search" method="get">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q" value="{{ request.args.get('q', '') }}">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" name="q" value="{{ request.args.get('q', '') }}">
+                    <button class="btn btn-outline-success" type="submit">Поиск</button>
                 </form>
                 <div class="navbar-nav me-1 mb-2 mb-lg-0">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('posts.login_page') }}">Log in</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('profile.login_page') }}">Войти</a>
                 </div>
             </div>
         </div>

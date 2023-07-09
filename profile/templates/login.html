@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content_title %}
-  Log in
+  Авторизация
 {% endblock %}
 
 {% block content %}
@@ -37,28 +37,12 @@
         <p>
             {{ form.login(class='btn btn-success') }}
         </p>
-
-<!--      <div class="form-floating mb-3">-->
-<!--        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email" value="" required>-->
-<!--        <label for="floatingInput">Email address</label>-->
-<!--      </div>-->
-<!--      <div class="form-floating">-->
-<!--        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" value="" required>-->
-<!--        <label for="floatingPassword">Password</label>-->
-<!--      </div>-->
-<!--      <br>-->
-<!--      <div class="btn-group" role="group">-->
-<!--        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" name="remember">-->
-<!--        <label class="btn btn-outline-primary" for="btncheck1">Remember me</label>-->
-<!--      </div>-->
-<!--      <button type="submit" class="btn btn-success">Log in</button>-->
     </form>
     <br>
-    <form action="{{ url_for('posts.register_page') }}">
+    <form action="{{ url_for('profile.register_page') }}">
         <p>
             {{ form.register(class='btn btn-success') }}
         </p>
-<!--        <button type="submit" class="btn btn-success" value="">Register</button>-->
     </form>
   </div>
 {% endblock %}

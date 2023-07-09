@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block content_title %}
-    Блог о кошках, больших и не очень))
+    Ммм... Какие кошечки...
 {% endblock %}
 
 {% block content %}
     {% for post in posts%}
         <div class="container">
-            <img src="/post_avatar/{{ post.url }}" class="rounded mx-auto d-block" width="100" style="float:left">
+            <img src="{{ url_for('posts.get_post_avatar', url=post.url) }}" class="rounded mx-auto d-block" width="100" style="float:left">
             <a href="{{ url_for('posts.post_detail_page', url=post.url) }}">
                 <h5>{{ post.title }}</h5>
             </a>
