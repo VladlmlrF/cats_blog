@@ -42,6 +42,20 @@ def create_post_page():
     return render_template('create_post_page.html', form=form)
 
 
+@posts.route('/<url>/edit', methods=['GET', 'POST'])
+def edit_post_page(url):
+    post = Post.query.filter(Post.url == url).first()
+    form = PostForm(formdata=request.form, obj=post)
+
+    if request.method == 'POST':
+        form.populate_obj(post)
+        db.session.commit()
+        return redirect(url_for('posts.post_detail_page', url=post.url))
+
+    form = PostForm(obj=post)
+    return render_template('edit_post.html', post=post, form=form)
+
+
 @posts.route('/')
 def index_page():
     q = request.args.get('q')

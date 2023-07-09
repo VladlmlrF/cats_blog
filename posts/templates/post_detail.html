@@ -16,6 +16,7 @@
             <a href="{{ url_for('posts.tag_detail_page', url=tag.url) }}" class="btn btn-warning">{{ tag.title }}</a>
             {% endfor %}
             <p class="card-text">{{ post.body }}</p>
+            <a href="{{ url_for('posts.edit_post_page', url=post.url) }}" class="btn btn-danger">Редактировать пост</a>
         </div>
     </div>
 {% endblock %}
