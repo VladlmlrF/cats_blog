@@ -22,10 +22,8 @@
                         <a class="nav-link active" href="{{ url_for('posts.create_post_page') }}">Создать пост</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search" method="get">
-                    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" name="q" value="{{ request.args.get('q', '') }}">
-                    <button class="btn btn-outline-success" type="submit">Поиск</button>
-                </form>
+                {% block search %}
+                {% endblock%}
                 <div class="navbar-nav me-1 mb-2 mb-lg-0">
                         <a class="nav-link active" aria-current="page" href="{{ url_for('profile.login_page') }}">Войти</a>
                 </div>

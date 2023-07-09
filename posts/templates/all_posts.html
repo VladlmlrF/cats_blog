@@ -4,6 +4,13 @@
     Home page
 {% endblock %}
 
+{% block search %}
+    <form class="d-flex" role="search" method="get">
+        <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" name="q" value="{{ request.args.get('q', '') }}">
+        <button class="btn btn-outline-success" type="submit">Поиск</button>
+    </form>
+{% endblock %}
+
 {% block content_title %}
     Ммм... Какие кошечки...
 {% endblock %}
