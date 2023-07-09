@@ -16,16 +16,18 @@
 {% endblock %}
 
 {% block content %}
-    {% for post in posts%}
-        <div class="container">
-            <img src="{{ url_for('posts.get_post_avatar', url=post.url) }}" class="rounded mx-auto d-block" width="100" style="float:left">
-            <a href="{{ url_for('posts.post_detail_page', url=post.url) }}">
-                <h5>{{ post.title }}</h5>
-            </a>
-        </div>
-        <p>
-            {{ post.body[:100] }}...
-        </p>
-        <br>
-    {% endfor %}
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for post in posts%}
+            <div class="col">
+                <div class="card text-bg-success mb-3 h-100">
+                    <img src="{{ url_for('posts.get_post_avatar', url=post.url) }}" class="card-img-top" alt="Картинка с кошечкой">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.body[:100] }}...</p>
+                        <a href="{{ url_for('posts.post_detail_page', url=post.url) }}" class="btn btn-warning">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

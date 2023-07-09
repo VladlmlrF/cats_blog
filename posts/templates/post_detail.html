@@ -5,17 +5,17 @@
 {% endblock %}
 
 {% block content_title %}
-    <p>{{ post.title }}</p>
 {% endblock %}
 
 {% block content %}
-    <div class="tags">
-        {% for tag in tags %}
-        <a href="{{ url_for('posts.tag_detail_page', url=tag.url) }}">
-            <span class="badge text-bg-primary">{{ tag.title }}</span>
-        </a>
-        {% endfor %}
+    <div class="card text-bg-success mb-3">
+        <img src="{{ url_for('posts.get_post_avatar', url=post.url) }}" class="card-img-top" alt="Картинка с кошечкой">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            {% for tag in tags %}
+            <a href="{{ url_for('posts.tag_detail_page', url=tag.url) }}" class="btn btn-warning">{{ tag.title }}</a>
+            {% endfor %}
+            <p class="card-text">{{ post.body }}</p>
+        </div>
     </div>
-    <img src="{{ url_for('posts.get_post_avatar', url=post.url) }}" class="rounded mx-auto d-block" width="500" style="float:left">
-    <p>{{ post.body }}</p>
 {% endblock %}
